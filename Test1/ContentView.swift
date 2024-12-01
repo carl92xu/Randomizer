@@ -7,7 +7,13 @@
 
 import SwiftUI
 
-var globalItems: [String] = []
+//var globalItems: [String] = []
+class GlobalItemsManager: ObservableObject {
+    @Published var items: [String] = []
+}
+
+let globalItems = GlobalItemsManager() // Shared instance
+
 
 struct ContentView: View {
     var body: some View {
@@ -27,6 +33,7 @@ struct ContentView: View {
 //                    Label("Third Tab", systemImage: "infinity.circle")
 //                }
         }
+        .environmentObject(globalItems) // Provide globalItems to child views
     }
 }
 
@@ -207,11 +214,12 @@ struct HomeView: View {
 }
 
 
-
 // Second Tab View
 struct SecondTabView: View {
+    @EnvironmentObject var globalItems: GlobalItemsManager // Observe globalItems
+    
     @State private var userInput: String = ""
-    @State private var items: [String] = [] // List to store user input
+//    @State private var items: [String] = [] // List to store user input
     @State private var showError: Bool = false // To track whether the error message should be shown
     @State private var showDisabledError: Bool = false // Show error for disabled button
     @State private var selectedItem: String? = nil // Store the randomly picked item
@@ -249,7 +257,7 @@ struct SecondTabView: View {
                     
                     HStack(spacing: 20) {
                         Button(action: {
-                            if items.isEmpty {
+                            if globalItems.items.isEmpty {
                                 if !errorCooldownActive {
                                     withAnimation {
                                         showDisabledError = true // Show error message
@@ -265,13 +273,13 @@ struct SecondTabView: View {
                                     }
                                 }
                             } else {
-//                                selectedItem = items.randomElement() // Pick a random item
-                                let randomIndex = Int.random(in: 0..<items.count)
-                                selectedItem = items[randomIndex]
+//                                selectedItem = globalItems.items.randomElement() // Pick a random item
+                                let randomIndex = Int.random(in: 0..<globalItems.items.count)
+                                selectedItem = globalItems.items[randomIndex]
                                 navigateToResult = true // Trigger navigation
                                 
                                 //*************************
-                                items.remove(at: randomIndex)
+                                globalItems.items.remove(at: randomIndex)
                                 //*************************
                             }
                         }) {
@@ -279,14 +287,14 @@ struct SecondTabView: View {
                                 .frame(maxWidth: .infinity)
                                 .padding()
                                 .foregroundColor(.white)
-                                .background(items.isEmpty ? Color.gray : Color.blue) // Gray out if no items
+                                .background(globalItems.items.isEmpty ? Color.gray : Color.blue) // Gray out if no globalItems
                                 .cornerRadius(8)
                         }
 
                         // Add to List Button
                         Button(action: {
                             if !userInput.isEmpty {
-                                if items.contains(userInput) {
+                                if globalItems.items.contains(userInput) {
                                     if !errorCooldownActive {
                                         withAnimation {
                                             showError = true // Show duplicate item error
@@ -302,7 +310,7 @@ struct SecondTabView: View {
                                         }
                                     }
                                 } else {
-                                    items.append(userInput) // Add user input to the list
+                                    globalItems.items.append(userInput) // Add user input to the list
                                     showError = false
                                 }
                                 userInput = "" // Clear the text field
@@ -318,11 +326,11 @@ struct SecondTabView: View {
                     }
                     .padding(.horizontal, 20)
                     
-                    if !items.isEmpty {
+                    if !globalItems.items.isEmpty {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Your Items:")
                                 .font(.headline)
-                            ForEach(items, id: \.self) { item in
+                            ForEach(globalItems.items, id: \.self) { item in
                                 Text("• \(item)")
                             }
                         }
@@ -335,7 +343,8 @@ struct SecondTabView: View {
             .navigationTitle("Draw Until Empty")
             .navigationBarTitleDisplayMode(.large)
             .navigationDestination(isPresented: $navigateToResult) {
-                SelectionPageView2(selectedItem: selectedItem, items: items)
+//                SelectionPageView2(selectedItem: selectedItem, items: globalItems.items)
+                SelectionPageView2(selectedItem: selectedItem)
             }
         }
         .overlay(
@@ -433,99 +442,21 @@ struct NewPageView: View {
     }
 }
 
-// New Page View for Tab 2
-//struct SelectionPageView2: View {
-//    @State private var showDisabledError: Bool = false
-//    @State private var selectedItemNew: String? = nil
-//    @State private var itemsNew: [String] = []
-//    @State private var navigateToResult: Bool = false
-//    @State private var errorCooldownActive: Bool = false
-//    
-//    var selectedItem: String?
-//    var items: [String]
-//
-//    var body: some View {
-//        VStack {
-//            Image(systemName: "star.fill")
-//                .imageScale(.large)
-//                .foregroundStyle(.yellow)
-//                .padding()
-//            if let item = selectedItem {
-//                Text("Current Pick:")
-//                    .font(.headline)
-//                    .padding()
-//                Text(item)
-//                    .font(.largeTitle)
-//                    .bold()
-//                    .padding()
-//            } else {
-//                Text("No item was selected!")
-//                    .font(.headline)
-//                    .padding()
-//            }
-//            
-//            
-//            // **********************
-//            // Add a Button Here: so that the user can click it and directly get the next selection
-//            // I SHOULD UPDATE THE CURRENT PAGE, NOT GO TO A NEW PAGE
-//            // **********************
-//            
-//            Button(action: {
-//                if items.isEmpty {
-//                    if !errorCooldownActive {
-//                        withAnimation {
-//                            showDisabledError = true // Show error message
-//                        }
-//                        errorCooldownActive = true // Activate cooldown
-//                        
-//                        // Reset state after cooldown
-//                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-//                            withAnimation {
-//                                showDisabledError = false
-//                                errorCooldownActive = false
-//                            }
-//                        }
-//                    }
-//                } else {
-//                    let randomIndex = Int.random(in: 0..<items.count)
-//                    selectedItemNew = items[randomIndex]
-//                    navigateToResult = true // Trigger navigation
-//                    
-//                    //*************************
-//                    itemsNew = items
-//                    itemsNew.remove(at: randomIndex)
-//                    //*************************
-//                }
-//            }) {
-//                Text("Next Pick")
-//                    .frame(maxWidth: .infinity)
-//                    .padding()
-//                    .foregroundColor(.white)
-//                    .background(items.isEmpty ? Color.gray : Color.blue) // Gray out if no items
-//                    .cornerRadius(8)
-//            }
-//            
-//        }
-//        .padding(.horizontal, 20)
-//        
-//        .navigationTitle("Result")
-//        .navigationBarTitleDisplayMode(.inline)
-//        .navigationDestination(isPresented: $navigateToResult) {
-//            SelectionPageView2(selectedItem: selectedItemNew, items: itemsNew)
-//        }
-//    }
-//}
 
 struct SelectionPageView2: View {
     @State private var showDisabledError: Bool = false
     @State private var errorCooldownActive: Bool = false
     @State private var currentSelectedItem: String? = nil
-    @State private var remainingItems: [String]
+//    @State private var remainingItems: [String]
 
     // Initialize with selectedItem and items
-    init(selectedItem: String?, items: [String]) {
+//    init(selectedItem: String?, items: [String]) {
+//        self._currentSelectedItem = State(initialValue: selectedItem)
+//        self._remainingItems = State(initialValue: globalItems.items)
+//    }
+    init(selectedItem: String?) {
         self._currentSelectedItem = State(initialValue: selectedItem)
-        self._remainingItems = State(initialValue: items)
+//        self._remainingItems = State(initialValue: globalItems.items)
     }
 
     var body: some View {
@@ -553,9 +484,9 @@ struct SelectionPageView2: View {
             Spacer().frame(height: 20)
             
             // Button to pick the next item
-            if !remainingItems.isEmpty {
+            if !globalItems.items.isEmpty {
                 Button(action: {
-                    if remainingItems.isEmpty {
+                    if globalItems.items.isEmpty {
                         if !errorCooldownActive {
                             withAnimation {
                                 showDisabledError = true // Show error message
@@ -572,16 +503,16 @@ struct SelectionPageView2: View {
                         }
                     } else {
                         // Pick a random item and remove it from the list
-                        let randomIndex = Int.random(in: 0..<remainingItems.count)
-                        currentSelectedItem = remainingItems[randomIndex]
-                        remainingItems.remove(at: randomIndex)
+                        let randomIndex = Int.random(in: 0..<globalItems.items.count)
+                        currentSelectedItem = globalItems.items[randomIndex]
+                        globalItems.items.remove(at: randomIndex)
                     }
                 }) {
                     Text("Next Pick")
                         .frame(maxWidth: .infinity)
                         .padding()
                         .foregroundColor(.white)
-                        .background(remainingItems.isEmpty ? Color.gray : Color.blue) // Gray out if no items
+                        .background(globalItems.items.isEmpty ? Color.gray : Color.blue) // Gray out if no items
                         .cornerRadius(8)
                 }
                 .padding(.horizontal, 20)

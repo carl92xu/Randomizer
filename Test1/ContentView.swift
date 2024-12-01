@@ -33,21 +33,47 @@ func triggerNotificationFeedback(type: UINotificationFeedbackGenerator.FeedbackT
 }
 
 
+//struct ContentView: View {
+////    @EnvironmentObject var globalItems: GlobalItemsManager
+//    
+//    var body: some View {
+//        TabView {
+//            HomeView()
+//                .tabItem {
+//                    Label("Home", systemImage: "house")
+//                }
+//            
+//            SecondTabView()
+//                .tabItem {
+//                    Label("Infinity", systemImage: "infinity")
+//                }
+//            
+//            ThirdTabView()
+//                .tabItem {
+//                    Label("Settings", systemImage: "gear")
+//                }
+//        }
+//        .environmentObject(globalItems) // Provide globalItems to child views
+//        .accentColor(globalItems.accentColor) // Use the global accent color
+//    }
+//}
+
+
 struct ContentView: View {
-//    @EnvironmentObject var globalItems: GlobalItemsManager  // this line causes the code to crash
-    
+//    @EnvironmentObject var globalItems: GlobalItemsManager // Access the shared instance      // Enable this line makes Infinity to break, but if not, accent color picker woundn't work
+
     var body: some View {
         TabView {
             HomeView()
                 .tabItem {
                     Label("Home", systemImage: "house")
                 }
-            
+
             SecondTabView()
                 .tabItem {
                     Label("Infinity", systemImage: "infinity")
                 }
-            
+
             ThirdTabView()
                 .tabItem {
                     Label("Settings", systemImage: "gear")
@@ -57,6 +83,7 @@ struct ContentView: View {
         .accentColor(globalItems.accentColor) // Use the global accent color
     }
 }
+
 
 // First Tab View
 struct HomeView: View {
@@ -487,6 +514,7 @@ struct ThirdTabView: View {
                                             .stroke(globalItems.accentColor == color ? Color.primary : Color.clear, lineWidth: 3)
                                     )
                                     .onTapGesture {
+//                                        print("Tapped color: \(color)") // Debug: Log the selected color
                                         globalItems.accentColor = color // Update the global accent color
                                     }
                             }
@@ -706,6 +734,11 @@ struct SelectionPageView2: View {
 }
 
 
+//#Preview {
+//    ContentView()
+//}
+
 #Preview {
     ContentView()
+        .environmentObject(GlobalItemsManager())
 }

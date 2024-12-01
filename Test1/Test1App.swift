@@ -9,12 +9,12 @@ import SwiftUI
 
 @main
 struct Test1App: App {
-    let globalItems = GlobalItemsManager() // Instantiate the shared manager
+    @StateObject private var globalItems = GlobalItemsManager() // Shared instance
 
     var body: some Scene {
         WindowGroup {
             ContentView()
-                .environmentObject(globalItems) // Inject into the environment
+                .environmentObject(globalItems) // Inject globalItems into the environment
         }
     }
 }

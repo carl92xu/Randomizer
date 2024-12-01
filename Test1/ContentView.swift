@@ -22,7 +22,7 @@ let globalItems = GlobalItemsManager() // Shared instance
 
 
 class GlobalAccentManager: ObservableObject {
-    @Published var accentColor: Color = .red {
+    @Published var accentColor: Color = .blue {
         didSet {
             objectWillChange.send() // Notify views of changes
         }
@@ -484,7 +484,7 @@ struct ThirdTabView: View {
     @EnvironmentObject var globalAccent: GlobalAccentManager
     
     private let predefinedColors: [Color] = [
-        .red, .orange, .yellow, .green, .blue, .purple, .pink, .gray, .white]
+        .red, .orange, .yellow, .green, .blue, .purple, .pink, .gray, .primary]
 
     var body: some View {
         NavigationStack {
@@ -495,7 +495,7 @@ struct ThirdTabView: View {
                     // Haptic Strength Section
                     Text("Haptic Strength")
                         .font(.headline)
-                        .padding(.leading)
+//                        .padding(.leading)
 
                     Picker("Haptic Style", selection: $globalItems.hapticStyle) {
                         Text("Light").tag(UIImpactFeedbackGenerator.FeedbackStyle.light)
@@ -503,17 +503,17 @@ struct ThirdTabView: View {
                         Text("Heavy").tag(UIImpactFeedbackGenerator.FeedbackStyle.heavy)
                     }
                     .pickerStyle(SegmentedPickerStyle())
-                    .padding(.horizontal)
+//                    .padding(.horizontal)
                     .onChange(of: globalItems.hapticStyle) {
                         triggerHapticFeedback()
                     }
 
-                    Spacer().frame(height: 20)
+                    Spacer().frame(height: 1)
 
                     // Accent Color Section
                     Text("Accent Color")
                         .font(.headline)
-                        .padding(.leading)
+//                        .padding(.leading)
 
                     VStack(alignment: .leading, spacing: 10) {
 
@@ -538,7 +538,7 @@ struct ThirdTabView: View {
                                 Spacer()
                                 Circle()
                                     .fill(globalAccent.accentColor) // Show the selected color
-                                    .frame(width: 36, height: 36) // Set desired size
+                                    .frame(width: 40, height: 40) // Set desired size
                                     .overlay(
                                         Circle()
                                             .strokeBorder(
@@ -562,11 +562,16 @@ struct ThirdTabView: View {
                         }
                         .padding(.horizontal)
                     }
-
+                    .padding(.vertical)
+                    .background(Color(.systemGray6)) // Add a light gray background
+                    .cornerRadius(10) // Round the corners of the background
+//                    .shadow(radius: 5) // Optional: Add a shadow for depth
+                    
                     Spacer() // Optional: Add spacer for better layout at the bottom
                 }
                 .padding(.vertical)
             }
+            .padding(.horizontal, 20)
             .navigationTitle("Settings")
             .navigationBarTitleDisplayMode(.large)
         }
@@ -746,11 +751,6 @@ struct SelectionPageView2: View {
         )
     }
 }
-
-
-//#Preview {
-//    ContentView()
-//}
 
 #Preview {
     ContentView()

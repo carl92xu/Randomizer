@@ -10,12 +10,32 @@ import SwiftUI
 //var globalItems: [String] = []
 class GlobalItemsManager: ObservableObject {
     @Published var items: [String] = []
+    @Published var hapticStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
+    @Published var accentColor: Color = .red {
+        didSet {
+            objectWillChange.send() // Notify views of changes
+        }
+    }
 }
 
 let globalItems = GlobalItemsManager() // Shared instance
 
 
+// Helper function for haptic feedback
+func triggerHapticFeedback() {
+    let generator = UIImpactFeedbackGenerator(style: globalItems.hapticStyle)
+    generator.impactOccurred()
+}
+
+func triggerNotificationFeedback(type: UINotificationFeedbackGenerator.FeedbackType) {
+    let generator = UINotificationFeedbackGenerator()
+    generator.notificationOccurred(type)
+}
+
+
 struct ContentView: View {
+//    @EnvironmentObject var globalItems: GlobalItemsManager  // this line causes the code to crash
+    
     var body: some View {
         TabView {
             HomeView()
@@ -28,12 +48,13 @@ struct ContentView: View {
                     Label("Infinity", systemImage: "infinity")
                 }
             
-//            ThirdTabView()
-//                .tabItem {
-//                    Label("Third Tab", systemImage: "infinity.circle")
-//                }
+            ThirdTabView()
+                .tabItem {
+                    Label("Settings", systemImage: "gear")
+                }
         }
         .environmentObject(globalItems) // Provide globalItems to child views
+        .accentColor(globalItems.accentColor) // Use the global accent color
     }
 }
 
@@ -76,6 +97,8 @@ struct HomeView: View {
                     HStack(spacing: 20) {
                         Button(action: {
                             if items.isEmpty {
+                                triggerNotificationFeedback(type: .error) // Error feedback
+                                
                                 if !errorCooldownActive {
                                     withAnimation {
                                         showDisabledError = true // Show error message
@@ -91,6 +114,8 @@ struct HomeView: View {
                                     }
                                 }
                             } else {
+                                triggerNotificationFeedback(type: .success)
+                                
                                 selectedItem = items.randomElement() // Pick a random item
                                 navigateToResult = true // Trigger navigation
                                 items = []
@@ -108,6 +133,8 @@ struct HomeView: View {
                         Button(action: {
                             if !userInput.isEmpty {
                                 if items.contains(userInput) {
+                                    triggerNotificationFeedback(type: .error)
+                                    
                                     if !errorCooldownActive {
                                         withAnimation {
                                             showError = true // Show duplicate item error
@@ -123,6 +150,8 @@ struct HomeView: View {
                                         }
                                     }
                                 } else {
+                                    triggerHapticFeedback()
+                                    
                                     items.append(userInput) // Add user input to the list
                                     showError = false
                                 }
@@ -258,6 +287,8 @@ struct SecondTabView: View {
                     HStack(spacing: 20) {
                         Button(action: {
                             if globalItems.items.isEmpty {
+                                triggerNotificationFeedback(type: .error)
+                                
                                 if !errorCooldownActive {
                                     withAnimation {
                                         showDisabledError = true // Show error message
@@ -274,6 +305,8 @@ struct SecondTabView: View {
                                 }
                             } else {
 //                                selectedItem = globalItems.items.randomElement() // Pick a random item
+                                triggerHapticFeedback()
+                                
                                 let randomIndex = Int.random(in: 0..<globalItems.items.count)
                                 selectedItem = globalItems.items[randomIndex]
                                 navigateToResult = true // Trigger navigation
@@ -295,6 +328,8 @@ struct SecondTabView: View {
                         Button(action: {
                             if !userInput.isEmpty {
                                 if globalItems.items.contains(userInput) {
+                                    triggerNotificationFeedback(type: .error)
+                                    
                                     if !errorCooldownActive {
                                         withAnimation {
                                             showError = true // Show duplicate item error
@@ -310,6 +345,8 @@ struct SecondTabView: View {
                                         }
                                     }
                                 } else {
+                                    triggerHapticFeedback()
+                                    
                                     globalItems.items.append(userInput) // Add user input to the list
                                     showError = false
                                 }
@@ -403,12 +440,96 @@ struct SecondTabView: View {
 
 
 // Third Tab View
-//struct ThirdTabView: View {
-//    var body: some View {
-//        Text("Third Tab Content")
-//            .padding()
-//    }
-//}
+struct ThirdTabView: View {
+    @EnvironmentObject var globalItems: GlobalItemsManager
+    private let predefinedColors: [Color] = [
+        .red, .orange, .yellow, .green, .blue, .purple, .pink, .gray, .white]
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    Spacer().frame(height: 1)
+
+                    // Haptic Strength Section
+                    Text("Haptic Strength")
+                        .font(.headline)
+                        .padding(.leading)
+
+                    Picker("Haptic Style", selection: $globalItems.hapticStyle) {
+                        Text("Light").tag(UIImpactFeedbackGenerator.FeedbackStyle.light)
+                        Text("Medium").tag(UIImpactFeedbackGenerator.FeedbackStyle.medium)
+                        Text("Heavy").tag(UIImpactFeedbackGenerator.FeedbackStyle.heavy)
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                    .padding(.horizontal)
+                    .onChange(of: globalItems.hapticStyle) {
+                        triggerHapticFeedback()
+                    }
+
+                    Spacer().frame(height: 20)
+
+                    // Accent Color Section
+                    Text("Accent Color")
+                        .font(.headline)
+                        .padding(.leading)
+
+                    VStack(alignment: .leading, spacing: 10) {
+
+                        // Predefined Color Palette
+                        LazyVGrid(columns: Array(repeating: GridItem(.flexible()), count: 5), spacing: 10) {
+                            ForEach(predefinedColors, id: \.self) { color in
+                                Circle()
+                                    .fill(color)
+                                    .frame(width: 40, height: 40)
+                                    .overlay(
+                                        Circle()
+                                            .stroke(globalItems.accentColor == color ? Color.primary : Color.clear, lineWidth: 3)
+                                    )
+                                    .onTapGesture {
+                                        globalItems.accentColor = color // Update the global accent color
+                                    }
+                            }
+                            
+                            // Custom ColorPicker Styled as a Circle
+                            HStack {
+                                Spacer()
+                                Circle()
+                                    .fill(globalItems.accentColor) // Show the selected color
+                                    .frame(width: 36, height: 36) // Set desired size
+                                    .overlay(
+                                        Circle()
+                                            .strokeBorder(
+                                                AngularGradient(
+                                                    gradient: Gradient(colors: [.red, .orange, .yellow, .green, .blue, .purple, .red]),
+                                                    center: .center
+                                                ),
+                                                lineWidth: 4
+                                            )
+                                    )
+                                    .overlay(
+                                        // Make the ColorPicker interactive and styled
+                                        ColorPicker("", selection: $globalItems.accentColor)
+                                            .labelsHidden() // Hide default label
+                                            .frame(width: 40, height: 40)
+                                            .blendMode(.destinationOver) // Ensure the color fill is visible
+                                    )
+                                Spacer()
+                            }
+                            
+                        }
+                        .padding(.horizontal)
+                    }
+
+                    Spacer() // Optional: Add spacer for better layout at the bottom
+                }
+                .padding(.vertical)
+            }
+            .navigationTitle("Settings")
+            .navigationBarTitleDisplayMode(.large)
+        }
+    }
+}
 
 
 // New Page View for Tab 1
@@ -487,6 +608,8 @@ struct SelectionPageView2: View {
             if !globalItems.items.isEmpty {
                 Button(action: {
                     if globalItems.items.isEmpty {
+                        triggerNotificationFeedback(type: .error)
+                        
                         if !errorCooldownActive {
                             withAnimation {
                                 showDisabledError = true // Show error message
@@ -502,6 +625,12 @@ struct SelectionPageView2: View {
                             }
                         }
                     } else {
+                        if globalItems.items.count == 1 {
+                            triggerNotificationFeedback(type: .warning)
+                        } else {
+                            triggerHapticFeedback()
+                        }
+                                                    
                         // Pick a random item and remove it from the list
                         let randomIndex = Int.random(in: 0..<globalItems.items.count)
                         currentSelectedItem = globalItems.items[randomIndex]
@@ -516,6 +645,26 @@ struct SelectionPageView2: View {
                         .cornerRadius(8)
                 }
                 .padding(.horizontal, 20)
+            } else {
+                Text("No More Items Left to Pick")
+                    .padding()
+
+//                GeometryReader { geometry in
+//                    VStack {
+//                        Spacer() // Push content to the bottom
+//                        
+//                        Text("No More Items Left to Pick")
+//                            .font(.headline)
+//                            .padding()
+//                            .frame(maxWidth: .infinity)
+//                            .background(Color.gray.opacity(0.2)) // Optional background
+//                            .cornerRadius(8)
+//                            .padding(.horizontal, 20)
+//                            .padding(.bottom, geometry.safeAreaInsets.bottom + 20) // Adjust for safe area
+//                        
+//                    }
+//                    .ignoresSafeArea(edges: .bottom) // Ensure it doesn't overlap with the safe area
+//                }
             }
             
             Spacer()

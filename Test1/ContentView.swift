@@ -11,6 +11,17 @@ import SwiftUI
 class GlobalItemsManager: ObservableObject {
     @Published var items: [String] = []
     @Published var hapticStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
+//    @Published var accentColor: Color = .red {
+//        didSet {
+//            objectWillChange.send() // Notify views of changes
+//        }
+//    }
+}
+
+let globalItems = GlobalItemsManager() // Shared instance
+
+
+class GlobalAccentManager: ObservableObject {
     @Published var accentColor: Color = .red {
         didSet {
             objectWillChange.send() // Notify views of changes
@@ -18,7 +29,7 @@ class GlobalItemsManager: ObservableObject {
     }
 }
 
-let globalItems = GlobalItemsManager() // Shared instance
+let globalAccent = GlobalAccentManager() // Shared instance
 
 
 // Helper function for haptic feedback
@@ -60,8 +71,8 @@ func triggerNotificationFeedback(type: UINotificationFeedbackGenerator.FeedbackT
 
 
 struct ContentView: View {
-//    @EnvironmentObject var globalItems: GlobalItemsManager // Access the shared instance      // Enable this line makes Infinity to break, but if not, accent color picker woundn't work
-
+    @EnvironmentObject var globalAccent: GlobalAccentManager // Access the shared instance  // Enable this line causes the preview to crash
+    
     var body: some View {
         TabView {
             HomeView()
@@ -80,7 +91,8 @@ struct ContentView: View {
                 }
         }
         .environmentObject(globalItems) // Provide globalItems to child views
-        .accentColor(globalItems.accentColor) // Use the global accent color
+        .environmentObject(globalAccent)
+        .accentColor(globalAccent.accentColor) // Use the global accent color
     }
 }
 
@@ -469,6 +481,8 @@ struct SecondTabView: View {
 // Third Tab View
 struct ThirdTabView: View {
     @EnvironmentObject var globalItems: GlobalItemsManager
+    @EnvironmentObject var globalAccent: GlobalAccentManager
+    
     private let predefinedColors: [Color] = [
         .red, .orange, .yellow, .green, .blue, .purple, .pink, .gray, .white]
 
@@ -511,11 +525,11 @@ struct ThirdTabView: View {
                                     .frame(width: 40, height: 40)
                                     .overlay(
                                         Circle()
-                                            .stroke(globalItems.accentColor == color ? Color.primary : Color.clear, lineWidth: 3)
+                                            .stroke(globalAccent.accentColor == color ? Color.primary : Color.clear, lineWidth: 3)
                                     )
                                     .onTapGesture {
 //                                        print("Tapped color: \(color)") // Debug: Log the selected color
-                                        globalItems.accentColor = color // Update the global accent color
+                                        globalAccent.accentColor = color // Update the global accent color
                                     }
                             }
                             
@@ -523,7 +537,7 @@ struct ThirdTabView: View {
                             HStack {
                                 Spacer()
                                 Circle()
-                                    .fill(globalItems.accentColor) // Show the selected color
+                                    .fill(globalAccent.accentColor) // Show the selected color
                                     .frame(width: 36, height: 36) // Set desired size
                                     .overlay(
                                         Circle()
@@ -537,7 +551,7 @@ struct ThirdTabView: View {
                                     )
                                     .overlay(
                                         // Make the ColorPicker interactive and styled
-                                        ColorPicker("", selection: $globalItems.accentColor)
+                                        ColorPicker("", selection: $globalAccent.accentColor)
                                             .labelsHidden() // Hide default label
                                             .frame(width: 40, height: 40)
                                             .blendMode(.destinationOver) // Ensure the color fill is visible
@@ -741,4 +755,5 @@ struct SelectionPageView2: View {
 #Preview {
     ContentView()
         .environmentObject(GlobalItemsManager())
+        .environmentObject(GlobalAccentManager())
 }

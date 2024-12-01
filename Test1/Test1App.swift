@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct Test1App: App {
     @StateObject private var globalItems = GlobalItemsManager() // Shared instance
+    @StateObject private var globalAccent = GlobalAccentManager() // Shared instance
 
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(globalItems) // Inject globalItems into the environment
+                .environmentObject(globalAccent)
         }
     }
 }

@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C3A7E3F12CFC14360093CDBB /* Test1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test1.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		C3A7E4012CFC14380093CDBB /* Test1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test1Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		C3A7E40B2CFC14380093CDBB /* Test1UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test1UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3A7E3F12CFC14360093CDBB /* Test1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Test1.app; path = "/Users/carl/Documents/Xcode/Test1/build/Debug-iphoneos/Test1.app"; sourceTree = "<absolute>"; };
+		C3A7E4012CFC14380093CDBB /* Test1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Test1Tests.xctest; path = "/Users/carl/Documents/Xcode/Test1/build/Debug-iphoneos/Test1.app/PlugIns/Test1Tests.xctest"; sourceTree = "<absolute>"; };
+		C3A7E40B2CFC14380093CDBB /* Test1UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Test1UITests.xctest; path = "/Users/carl/Documents/Xcode/Test1/build/Debug-iphoneos/Test1UITests-Runner.app/PlugIns/Test1UITests.xctest"; sourceTree = "<absolute>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -78,18 +78,7 @@
 				C3A7E3F32CFC14360093CDBB /* Test1 */,
 				C3A7E4042CFC14380093CDBB /* Test1Tests */,
 				C3A7E40E2CFC14380093CDBB /* Test1UITests */,
-				C3A7E3F22CFC14360093CDBB /* Products */,
 			);
-			sourceTree = "<group>";
-		};
-		C3A7E3F22CFC14360093CDBB /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				C3A7E3F12CFC14360093CDBB /* Test1.app */,
-				C3A7E4012CFC14380093CDBB /* Test1Tests.xctest */,
-				C3A7E40B2CFC14380093CDBB /* Test1UITests.xctest */,
-			);
-			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -196,7 +185,7 @@
 			mainGroup = C3A7E3E82CFC14360093CDBB;
 			minimizedProjectReferenceProxies = 1;
 			preferredProjectObjectVersion = 77;
-			productRefGroup = C3A7E3F22CFC14360093CDBB /* Products */;
+			productRefGroup = C3A7E3E82CFC14360093CDBB;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (

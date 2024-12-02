@@ -111,6 +111,7 @@ struct HomeView: View {
                     }
                     .padding(.horizontal, 20)
                     
+                    // Display list of items added
                     if !items.isEmpty {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Your Items:")
@@ -134,6 +135,7 @@ struct HomeView: View {
                 SelectionPageView(selectedItem: selectedItem)
             }
         }
+        // Error popups
         .overlay(
             ErrorOverlayView(
                 showError: showError,

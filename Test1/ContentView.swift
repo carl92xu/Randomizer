@@ -121,29 +121,55 @@ struct TappableTextFieldStyle: TextFieldStyle {
 
 struct ContentView: View {
     @EnvironmentObject var globalAccent: GlobalAccentManager // Access the shared instance
-    
+    @State private var isLandscape: Bool = false
+
     var body: some View {
-        TabView {
-            HomeView()
-                .tabItem {
-                    Label("Home", systemImage: "house")
-                }
+        GeometryReader { geometry in
+            let isLandscape = geometry.size.width > geometry.size.height
 
-            InfinityView()
-                .tabItem {
-                    Label("Infinity", systemImage: "infinity")
-                }
+            TabView {
+                HomeView()
+                    .tabItem {
+                        Label("Home", systemImage: "house")
+                    }
+                    .tag(1)
 
-            SettingsView()
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
-                }
+                InfinityView()
+                    .tabItem {
+                        Label("Infinity", systemImage: "infinity")
+                    }
+                    .tag(2)
+
+                SettingsView()
+                    .tabItem {
+                        Label("Settings", systemImage: "gear")
+                    }
+                    .tag(3)
+
+                MapsView()
+                    .tabItem {
+                        Label("Maps", systemImage: "map")
+                    }
+                    .tag(4)
+            }
+//            .toolbar {
+//                if !isLandscape {
+//                    ToolbarItem(placement: .bottomBar) {
+//                        HStack {
+//                            Spacer()
+//                            Text("Toolbar visible in portrait mode")
+//                            Spacer()
+//                        }
+//                    }
+//                }
+//            }
         }
-        .environmentObject(globalItems) // Provide globalItems to child views
+        .environmentObject(globalItems)
         .environmentObject(globalAccent)
-        .accentColor(globalAccent.accentColor) // Use the global accent color
+        .accentColor(globalAccent.accentColor)
     }
 }
+
 
 #Preview {
     ContentView()

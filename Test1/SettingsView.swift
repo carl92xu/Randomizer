@@ -26,6 +26,7 @@ struct SettingsView: View {
                         .font(.headline)
 //                        .padding(.leading)
 
+                    // Haptic Strength Picker
                     Picker("Haptic Style", selection: $globalItems.hapticStyle) {
                         Text("Light").tag(UIImpactFeedbackGenerator.FeedbackStyle.light)
                         Text("Medium").tag(UIImpactFeedbackGenerator.FeedbackStyle.medium)
@@ -44,6 +45,7 @@ struct SettingsView: View {
                         .font(.headline)
 //                        .padding(.leading)
 
+                    // Display colors in 2x5 grid
                     VStack(alignment: .leading, spacing: 10) {
 
                         // Predefined Color Palette

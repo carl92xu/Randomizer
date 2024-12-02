@@ -123,6 +123,7 @@ struct InfinityView: View {
                     }
                     .padding(.horizontal, 20)
                     
+                    // Display list of items added
                     if !globalItems.items.isEmpty {
                         VStack(alignment: .leading, spacing: 10) {
                             Text("Your Items:")
@@ -146,6 +147,7 @@ struct InfinityView: View {
                 InfinitySelectionPageView(selectedItem: selectedItem)
             }
         }
+        // Error popups
         .overlay(
             ErrorOverlayView(
                 showError: showError,

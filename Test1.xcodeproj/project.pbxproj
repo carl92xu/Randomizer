@@ -24,9 +24,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		C3A7E3F12CFC14360093CDBB /* Test1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Test1.app; path = "/Users/carl/Documents/Xcode/Test1/build/Debug-iphoneos/Test1.app"; sourceTree = "<absolute>"; };
-		C3A7E4012CFC14380093CDBB /* Test1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Test1Tests.xctest; path = "/Users/carl/Documents/Xcode/Test1/build/Debug-iphoneos/Test1.app/PlugIns/Test1Tests.xctest"; sourceTree = "<absolute>"; };
-		C3A7E40B2CFC14380093CDBB /* Test1UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; name = Test1UITests.xctest; path = "/Users/carl/Documents/Xcode/Test1/build/Debug-iphoneos/Test1UITests-Runner.app/PlugIns/Test1UITests.xctest"; sourceTree = "<absolute>"; };
+		C3A7E4342CFD20830093CDBB /* Test1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Test1.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3AB72732CFD23FF0045DFC7 /* Test1Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test1Tests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		C3AB72742CFD23FF0045DFC7 /* Test1UITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = Test1UITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
@@ -78,6 +78,9 @@
 				C3A7E3F32CFC14360093CDBB /* Test1 */,
 				C3A7E4042CFC14380093CDBB /* Test1Tests */,
 				C3A7E40E2CFC14380093CDBB /* Test1UITests */,
+				C3A7E4342CFD20830093CDBB /* Test1.app */,
+				C3AB72732CFD23FF0045DFC7 /* Test1Tests.xctest */,
+				C3AB72742CFD23FF0045DFC7 /* Test1UITests.xctest */,
 			);
 			sourceTree = "<group>";
 		};
@@ -103,7 +106,7 @@
 			packageProductDependencies = (
 			);
 			productName = Test1;
-			productReference = C3A7E3F12CFC14360093CDBB /* Test1.app */;
+			productReference = C3A7E4342CFD20830093CDBB /* Test1.app */;
 			productType = "com.apple.product-type.application";
 		};
 		C3A7E4002CFC14380093CDBB /* Test1Tests */ = {
@@ -126,7 +129,7 @@
 			packageProductDependencies = (
 			);
 			productName = Test1Tests;
-			productReference = C3A7E4012CFC14380093CDBB /* Test1Tests.xctest */;
+			productReference = C3AB72732CFD23FF0045DFC7 /* Test1Tests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 		C3A7E40A2CFC14380093CDBB /* Test1UITests */ = {
@@ -149,7 +152,7 @@
 			packageProductDependencies = (
 			);
 			productName = Test1UITests;
-			productReference = C3A7E40B2CFC14380093CDBB /* Test1UITests.xctest */;
+			productReference = C3AB72742CFD23FF0045DFC7 /* Test1UITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -373,6 +376,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -394,6 +398,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -424,6 +429,7 @@
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -515,7 +521,7 @@
 				C3A7E4142CFC14380093CDBB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		C3A7E4152CFC14380093CDBB /* Build configuration list for PBXNativeTarget "Test1" */ = {
 			isa = XCConfigurationList;
@@ -524,7 +530,7 @@
 				C3A7E4172CFC14380093CDBB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		C3A7E4182CFC14380093CDBB /* Build configuration list for PBXNativeTarget "Test1Tests" */ = {
 			isa = XCConfigurationList;
@@ -533,7 +539,7 @@
 				C3A7E41A2CFC14380093CDBB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		C3A7E41B2CFC14380093CDBB /* Build configuration list for PBXNativeTarget "Test1UITests" */ = {
 			isa = XCConfigurationList;
@@ -542,7 +548,7 @@
 				C3A7E41D2CFC14380093CDBB /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};

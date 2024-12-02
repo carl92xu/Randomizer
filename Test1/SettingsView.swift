@@ -29,7 +29,7 @@ struct SettingsView: View {
                     Picker("Haptic Style", selection: $globalItems.hapticStyle) {
                         Text("Light").tag(UIImpactFeedbackGenerator.FeedbackStyle.light)
                         Text("Medium").tag(UIImpactFeedbackGenerator.FeedbackStyle.medium)
-                        Text("Heavy").tag(UIImpactFeedbackGenerator.FeedbackStyle.heavy)
+                        Text("Strong").tag(UIImpactFeedbackGenerator.FeedbackStyle.heavy)
                     }
                     .pickerStyle(SegmentedPickerStyle())
 //                    .padding(.horizontal)

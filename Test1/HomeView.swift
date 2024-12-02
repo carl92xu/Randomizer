@@ -25,7 +25,7 @@ struct HomeView: View {
                     
                     Spacer().frame(height: 30)
                     
-                    Image(systemName: "vision.pro")
+                    Image(systemName: "dice")
                         .imageScale(.large)
                         .font(.system(size: 50))
                         .foregroundStyle(.tint)
@@ -33,13 +33,7 @@ struct HomeView: View {
                         .padding()
                     
                     TextField("What do you want me to help you decide?", text: $userInput)
-//                        .textFieldStyle(RoundedBorderTextFieldStyle())
-//                        .padding()
-                        .padding() // Add internal padding for text
-                        .frame(height: 50) // Set the height
-                        .background(Color(.systemGray6)) // Add a background color
-                        .cornerRadius(8) // Round the corners
-                        .padding()
+                        .textFieldStyle(TappableTextFieldStyle())
                     
                     Spacer().frame(height: 20)
                     

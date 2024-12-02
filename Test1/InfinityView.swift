@@ -25,14 +25,14 @@ struct InfinityView: View {
             ScrollView {
                 VStack {
                     
-                    Spacer().frame(height: 30)
+                    Spacer().frame(height: 35)
                     
                     Image(systemName: "infinity")
                         .imageScale(.large)
                         .font(.system(size: 60))
                         .foregroundStyle(.tint)
                     
-                    Spacer().frame(height: 10)
+                    Spacer().frame(height: 30)
                     
                     Text("Hello, world!")
                         .padding()
@@ -40,11 +40,7 @@ struct InfinityView: View {
                     Spacer().frame(height: 8)
                     
                     TextField("What do you want me to help you decide?", text: $userInput)
-                        .padding() // Add internal padding for text
-                        .frame(height: 50) // Set the height
-                        .background(Color(.systemGray6)) // Add a background color
-                        .cornerRadius(8) // Round the corners
-                        .padding()
+                        .textFieldStyle(TappableTextFieldStyle())
                     
                     Spacer().frame(height: 20)
                     

@@ -24,7 +24,7 @@ let globalItems = GlobalItemsManager() // Shared instance
 let globalAccent = GlobalAccentManager() // Shared instance
 
 
-// Helper function for haptic feedback
+// Helper functions for haptic feedback
 func triggerHapticFeedback() {
     let generator = UIImpactFeedbackGenerator(style: globalItems.hapticStyle)
     generator.impactOccurred()
@@ -36,8 +36,26 @@ func triggerNotificationFeedback(type: UINotificationFeedbackGenerator.FeedbackT
 }
 
 
+// Custom TextField style to make touchable area bigger
+struct TappableTextFieldStyle: TextFieldStyle {
+    @FocusState private var textFieldFocused: Bool
+    func _body(configuration: TextField<Self._Label>) -> some View {
+        configuration
+            .padding(16) // Add internal padding for text
+            .frame(height: 60) // Set the height
+            .background(Color(.systemGray6)) // Add a background color
+            .cornerRadius(8) // Round the corners
+            .focused($textFieldFocused)
+            .onTapGesture {
+                textFieldFocused = true
+            }
+            .padding()  // External padding
+    }
+}
+
+
 struct ContentView: View {
-    @EnvironmentObject var globalAccent: GlobalAccentManager // Access the shared instance  // Enable this line causes the preview to crash
+    @EnvironmentObject var globalAccent: GlobalAccentManager // Access the shared instance
     
     var body: some View {
         TabView {

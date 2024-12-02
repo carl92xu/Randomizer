@@ -7,6 +7,7 @@
 
 import SwiftUI
 
+// Global variables
 class GlobalItemsManager: ObservableObject {
     @Published var items: [String] = []
     @Published var hapticStyle: UIImpactFeedbackGenerator.FeedbackStyle = .medium
@@ -33,6 +34,70 @@ func triggerHapticFeedback() {
 func triggerNotificationFeedback(type: UINotificationFeedbackGenerator.FeedbackType) {
     let generator = UINotificationFeedbackGenerator()
     generator.notificationOccurred(type)
+}
+
+
+// UIApplication extension for dismissing the keyboard
+extension UIApplication {
+    func dismissKeyboard() {
+        sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+    }
+}
+
+
+// Error popups
+struct ErrorOverlayView: View {
+    let showError: Bool
+    let showDisabledError: Bool
+    let dismissError: () -> Void // Callback to handle dismissal of errors
+    
+    var body: some View {
+        GeometryReader { geometry in
+            VStack {
+                Spacer()
+                    .frame(height: geometry.size.height - 70)
+                
+                // Duplicate item error
+                if showError {
+                    Text("Item is Already in the List")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.red)
+                        .cornerRadius(8)
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, geometry.safeAreaInsets.bottom + 50)
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                dismissError()
+                            }
+                        }
+                }
+                
+                // No item added error
+                if showDisabledError {
+                    Text("No Item has been Added")
+                        .font(.subheadline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.orange)
+                        .cornerRadius(8)
+                        .padding(.horizontal, 20)
+                        .padding(.bottom, geometry.safeAreaInsets.bottom + 50)
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                                dismissError()
+                            }
+                        }
+                }
+            }
+            .ignoresSafeArea(edges: .horizontal)
+        }
+    }
 }
 
 

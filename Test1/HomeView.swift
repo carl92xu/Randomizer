@@ -125,6 +125,9 @@ struct HomeView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
+            .onTapGesture {
+                UIApplication.shared.dismissKeyboard()
+            }
             .navigationTitle("Random Draw")
             .navigationBarTitleDisplayMode(.large)
             .navigationDestination(isPresented: $navigateToResult) {
@@ -132,55 +135,16 @@ struct HomeView: View {
             }
         }
         .overlay(
-            GeometryReader { geometry in
-                VStack {
-                    Spacer()
-                        .frame(height: geometry.size.height - 70)
-                    
-                    // Existing error message for duplicate items
-                    if showError {
-                        Text("Item is Already in the List")
-                            .font(.subheadline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.red)
-                            .cornerRadius(8)
-                            .padding(.horizontal, 20)
-                            .padding(.bottom, geometry.safeAreaInsets.bottom + 50)
-                            .transition(.opacity.combined(with: .move(edge: .bottom)))
-                            .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                    withAnimation {
-                                        showError = false
-                                    }
-                                }
-                            }
-                    }
-                    
-                    // New error message for disabled button
-                    if showDisabledError {
-                        Text("No Item has been Added")
-                            .font(.subheadline)
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.orange)
-                            .cornerRadius(8)
-                            .padding(.horizontal, 20)
-                            .padding(.bottom, geometry.safeAreaInsets.bottom + 50)
-                            .transition(.opacity.combined(with: .move(edge: .bottom)))
-                            .onAppear {
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                                    withAnimation {
-                                        showDisabledError = false
-                                    }
-                                }
-                            }
+            ErrorOverlayView(
+                showError: showError,
+                showDisabledError: showDisabledError,
+                dismissError: {
+                    withAnimation {
+                        showError = false
+                        showDisabledError = false
                     }
                 }
-                .ignoresSafeArea(edges: .horizontal)
-            }
+            )
         )
     }
 }
